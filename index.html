@@ -240,6 +240,31 @@
       transform: translateY(0);
     }
 
+    /* Efecto brillo al aparecer + Scroll to top */
+    @keyframes heartGlow {
+      0% { box-shadow: 0 0 0 rgba(255, 102, 163, 0); transform: translateY(0) scale(1); }
+      50% { box-shadow: 0 0 24px rgba(255, 102, 163, .65); transform: translateY(0) scale(1.08); }
+      100% { box-shadow: 0 0 0 rgba(255, 102, 163, 0); transform: translateY(0) scale(1); }
+    }
+    .btn-glow { animation: heartGlow 1.6s ease-in-out 2; }
+    @media (prefers-reduced-motion: reduce) { .btn-glow { animation: none; } }
+
+    .btn-top {
+      background-color: #ff66a3;
+      color: white;
+      font-size: 22px;
+      border-radius: 50%;
+      padding: 10px 14px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform .3s ease, background-color .3s ease, opacity 1s ease, transform 1s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      display: none;
+      margin-left: 10px;
+    }
+    .btn-top:hover { transform: scale(1.15); background-color: #ff3385; }
+
     /* Modal */
     .modal {
       display: none;
@@ -341,12 +366,13 @@
   <!-- Botones flotantes -->
   <div class="botones-container">
     <a class="btn-corazon" id="btn-corazon" onclick="mostrarModalCollage()" title="Abrir collage">❤️</a>
+    <a class="btn-top" id="btn-top" onclick="scrollToTop()" title="Volver arriba">↑</a>
   </div>
 
   <!-- Contenido principal -->
   <div class="contenido" id="contenido">
     <div class="mensaje">
-      "Un ramo de veinte gerberas guarda en sus pétalos la fuerza de mis sentimientos, cada una como un latido que nace al pensar en ti. Y cuando las sostengo, pareciera que del color brotan mariposas, revoloteando libres en el aire, como si el universo mismo quisiera adornar tu camino. Porque en su vuelo ligero y en la frescura de las flores, sólo encuentro la forma de compararte: tú, la niña que me gusta, la que con su risa hace danzar la vida, la que convierte cualquier instante sencillo en un recuerdo eterno. Así como las mariposas buscan la luz y las gerberas se abren al sol, mi corazón se abre a ti, esperando que mis sentimientos lleguen hasta tus ojos y florezcan contigo"
+      Un ramo de veinte gerberas guarda en sus pétalos la fuerza de mis sentimientos, cada una como un latido que nace al pensar en ti. Y cuando las sostengo, pareciera que del color brotan mariposas, revoloteando libres en el aire, como si el universo mismo quisiera adornar tu camino. Porque en su vuelo ligero y en la frescura de las flores, sólo encuentro la forma de compararte: tú, la niña que me gusta, la que con su risa hace danzar la vida, la que convierte cualquier instante sencillo en un recuerdo eterno. Así como las mariposas buscan la luz y las gerberas se abren al sol, mi corazón se abre a ti, esperando que mis sentimientos lleguen hasta tus ojos y florezcan contigo
       <br><br>
       Sos todo lo lindo, sos todo lo que por mucho tiempo, con lágrimas en los ojos, le pedía a Dios. Llegaste a mi vida justo cuando yo no sabía qué hacer conmigo mismo, cuando me sentía perdido y sin rumbo. Y fuiste quien me salvó de tantas cosas, quien con tu ternura, tu luz y amor me mostró que todavía había motivos para seguir.
       <br><br>
@@ -378,7 +404,7 @@
       <br><br>
       GRACIAS POR TANTO Y PERDÓN POR TAN POCO, TE AMO INFINITAMENTE ♥
       <br><br>
-      Gracias por estar conmigo en cada momento, por acompañarme en lo bueno y en lo difícil, por darme tu cariño sincero y tu apoyo incondicional. Gracias por ser mi razón de sonreír, por llenar mis días de luz y por demostrarme que el amor verdadero sí existe. A Dios le agradezco infinitamente por cruzar nuestros caminos, por bendecir este amor y por regalarme la oportunidad de amarte. Y a ti, gracias por ser parte de mi vida y por dejarme ser parte de la tuya. Nunca lo olvides: <b>te amo con todo lo que soy y con todo lo que seré</b>.
+      Gracias por estar conmigo en cada momento, por acompañarme en lo bueno y en lo difícil, por darme tu cariño sincero y tu apoyo incondicional. Gracias por ser mi razón de sonreír, por llenar mis días de luz y por demostrarme que el amor verdadero sí existe. A Dios le agradezco infinitamente por cruzar nuestros caminos, por bendecir este amor y por regalarme la oportunidad de amarte. Y a ti, amor mío, gracias por ser parte de mi vida y por dejarme ser parte de la tuya. Nunca lo olvides: <b>te amo con todo lo que soy y con todo lo que seré</b>.
       <br><br>
       <button class="btn-loviu" onclick="mostrarSorpresa()">Toca aquí para ver algo kul jijiji</button>
       <div id="mensaje-sorpresa">
@@ -438,14 +464,14 @@
       if (bienvenida) bienvenida.style.display = 'none';
       if (contenido) contenido.style.display = 'block';
 
-      // Mostrar botón corazón de inmediato
+      // NO mostrar el botón corazón todavía — sólo al final de la página
       const botonCorazon = document.getElementById('btn-corazon');
       if (botonCorazon) {
-        botonCorazon.style.display = 'inline-block';
-        setTimeout(() => botonCorazon.classList.add('btn-visible'), 10);
+        botonCorazon.style.display = 'none';
+        botonCorazon.classList.remove('btn-visible');
       }
 
-      // Revelar con intersección (para que no quede todo en opacidad 0)
+      // Revelar secciones con IntersectionObserver
       const targets = document.querySelectorAll('.collage img, .mensaje, .mensaje-final');
       if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
@@ -458,9 +484,38 @@
         }, { threshold: 0.1 });
         targets.forEach((el) => observer.observe(el));
       } else {
-        // Fallback: si no hay soporte, mostrar todo de una
         targets.forEach((el) => el.classList.add('visible'));
       }
+
+      // Mostrar botón corazón sólo cuando se llegue al final de la página
+      const checkBottom = () => {
+        const threshold = 100; // px antes del final
+        const scrollPos = (window.scrollY || window.pageYOffset) + window.innerHeight;
+        const pageHeight = document.documentElement.scrollHeight;
+        if (scrollPos >= pageHeight - threshold) {
+          if (botonCorazon && botonCorazon.style.display !== 'inline-block') {
+            botonCorazon.style.display = 'inline-block';
+            setTimeout(() => {
+              botonCorazon.classList.add('btn-visible','btn-glow');
+              setTimeout(() => botonCorazon.classList.remove('btn-glow'), 2200);
+            }, 10);
+          }
+          const btnTop = document.getElementById('btn-top');
+          if (btnTop && btnTop.style.display !== 'inline-block') {
+            btnTop.style.display = 'inline-block';
+            setTimeout(() => btnTop.classList.add('btn-visible'), 10);
+          }
+          window.removeEventListener('scroll', checkBottom);
+        }
+      };
+      window.addEventListener('scroll', checkBottom, { passive: true });
+      // Comprobar una vez por si ya está al final (pantallas chicas)
+      setTimeout(checkBottom, 50);
+    }
+
+    function scrollToTop(){
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
     }
 
     // Modal collage
