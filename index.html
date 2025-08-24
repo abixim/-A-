@@ -247,7 +247,18 @@
       100% { box-shadow: 0 0 0 rgba(255, 102, 163, 0); transform: translateY(0) scale(1); }
     }
     .btn-glow { animation: heartGlow 1.6s ease-in-out 2; }
-    @media (prefers-reduced-motion: reduce) { .btn-glow { animation: none; } }
+
+    /* Pulso continuo para el corazón */
+    @keyframes heartPulse {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(0) scale(1.1); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    .btn-pulse { animation: heartPulse 1.2s ease-in-out infinite; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn-glow, .btn-pulse { animation: none; }
+    }
 
     .btn-top {
       background-color: #ff66a3;
@@ -372,7 +383,7 @@
   <!-- Contenido principal -->
   <div class="contenido" id="contenido">
     <div class="mensaje">
-      Un ramo de veinte gerberas guarda en sus pétalos la fuerza de mis sentimientos, cada una como un latido que nace al pensar en ti. Y cuando las sostengo, pareciera que del color brotan mariposas, revoloteando libres en el aire, como si el universo mismo quisiera adornar tu camino. Porque en su vuelo ligero y en la frescura de las flores, sólo encuentro la forma de compararte: tú, la niña que me gusta, la que con su risa hace danzar la vida, la que convierte cualquier instante sencillo en un recuerdo eterno. Así como las mariposas buscan la luz y las gerberas se abren al sol, mi corazón se abre a ti, esperando que mis sentimientos lleguen hasta tus ojos y florezcan contigo
+      "Un ramo de veinte gerberas guarda en sus pétalos la fuerza de mis sentimientos, cada una como un latido que nace al pensar en ti. Y cuando las sostengo, pareciera que del color brotan mariposas, revoloteando libres en el aire, como si el universo mismo quisiera adornar tu camino. Porque en su vuelo ligero y en la frescura de las flores, sólo encuentro la forma de compararte: tú, la niña que me gusta, la que con su risa hace danzar la vida, la que convierte cualquier instante sencillo en un recuerdo eterno. Así como las mariposas buscan la luz y las gerberas se abren al sol, mi corazón se abre a ti, esperando que mis sentimientos lleguen hasta tus ojos y florezcan contigo"
       <br><br>
       Sos todo lo lindo, sos todo lo que por mucho tiempo, con lágrimas en los ojos, le pedía a Dios. Llegaste a mi vida justo cuando yo no sabía qué hacer conmigo mismo, cuando me sentía perdido y sin rumbo. Y fuiste quien me salvó de tantas cosas, quien con tu ternura, tu luz y amor me mostró que todavía había motivos para seguir.
       <br><br>
@@ -404,7 +415,7 @@
       <br><br>
       GRACIAS POR TANTO Y PERDÓN POR TAN POCO, TE AMO INFINITAMENTE ♥
       <br><br>
-      Gracias por estar conmigo en cada momento, por acompañarme en lo bueno y en lo difícil, por darme tu cariño sincero y tu apoyo incondicional. Gracias por ser mi razón de sonreír, por llenar mis días de luz y por demostrarme que el amor verdadero sí existe. A Dios le agradezco infinitamente por cruzar nuestros caminos, por bendecir este amor y por regalarme la oportunidad de amarte. Y a ti, amor mío, gracias por ser parte de mi vida y por dejarme ser parte de la tuya. Nunca lo olvides: <b>te amo con todo lo que soy y con todo lo que seré</b>.
+      Gracias por estar conmigo en cada momento, por acompañarme en lo bueno y en lo difícil, por darme tu cariño sincero y tu apoyo incondicional. Gracias por ser mi razón de sonreír, por llenar mis días de luz y por demostrarme que el amor verdadero sí existe. A Dios le agradezco infinitamente por cruzar nuestros caminos, por bendecir este amor y por regalarme la oportunidad de amarte. Y a ti, gracias por ser parte de mi vida y por dejarme ser parte de la tuya. Nunca lo olvides: <b>te amo con todo lo que soy y con todo lo que seré</b>.
       <br><br>
       <button class="btn-loviu" onclick="mostrarSorpresa()">Toca aquí para ver algo kul jijiji</button>
       <div id="mensaje-sorpresa">
@@ -496,8 +507,8 @@
           if (botonCorazon && botonCorazon.style.display !== 'inline-block') {
             botonCorazon.style.display = 'inline-block';
             setTimeout(() => {
-              botonCorazon.classList.add('btn-visible','btn-glow');
-              setTimeout(() => botonCorazon.classList.remove('btn-glow'), 2200);
+              // aparece, se vuelve visible y queda palpitando continuamente
+              botonCorazon.classList.add('btn-visible','btn-pulse');
             }, 10);
           }
           const btnTop = document.getElementById('btn-top');
